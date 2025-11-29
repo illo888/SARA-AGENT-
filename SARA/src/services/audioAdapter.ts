@@ -23,19 +23,41 @@ try {
 
 export const Audio = AudioImpl?.Audio || AudioImpl || null;
 
-// Small helper to create an Audio.Sound from a base64 audio (wav) string
-export async function createSoundFromBase64(base64: string) {
+// Small helper to create an Audio.Sound from a base64 audio (mp3/wav) string
+export async function createSoundFromBase64(base64: string, format: string = 'mp3') {
   if (!Audio) throw new Error('Audio module not available');
-  const uri = `data:audio/wav;base64,${base64}`;
-  // Audio.Sound.createAsync signature works in both libraries
-  const result = await Audio.Sound.createAsync({ uri } as any);
-  return result?.sound;
+  
+  // For expo-audio (new API)
+  if (AudioImpl && !AudioImpl.Audio) {
+    try {
+      const uri = `data:audio/${format};base64,${base64}`;
+      const player = await AudioImpl.createAudioPlayer({ uri });
+      return player;
+    } catch (err) {
+      console.error('expo-audio createAudioPlayer error:', err);
+      throw err;
+    }
+  }
+  
+  // For expo-av (legacy API)
+  if (Audio && Audio.Sound) {
+    const uri = `data:audio/${format};base64,${base64}`;
+    const result = await Audio.Sound.createAsync({ uri } as any);
+    return result?.sound;
+  }
+  
+  throw new Error('No audio implementation available');
 }
 
 export async function playSound(sound: any) {
   if (!sound) return;
   try {
-    await sound.playAsync();
+    // expo-audio uses .play(), expo-av uses .playAsync()
+    if (sound.play && typeof sound.play === 'function') {
+      await sound.play();
+    } else if (sound.playAsync && typeof sound.playAsync === 'function') {
+      await sound.playAsync();
+    }
   } catch (err) {
     console.warn('audioAdapter.playSound error', err);
   }
@@ -44,7 +66,15 @@ export async function playSound(sound: any) {
 export async function stopSound(sound: any) {
   if (!sound) return;
   try {
-    await sound.stopAsync();
+    // expo-audio uses .pause() + .remove(), expo-av uses .stopAsync()
+    if (sound.pause && typeof sound.pause === 'function') {
+      await sound.pause();
+      if (sound.remove && typeof sound.remove === 'function') {
+        await sound.remove();
+      }
+    } else if (sound.stopAsync && typeof sound.stopAsync === 'function') {
+      await sound.stopAsync();
+    }
   } catch (err) {
     console.warn('audioAdapter.stopSound error', err);
   }

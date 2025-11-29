@@ -13,7 +13,10 @@ export const VoiceRecorder = ({ onFinished }: { onFinished?: (uri: string) => vo
   async function startRecording() {
     try {
       const permission = await audioAdapter.requestRecordingPermissions();
-      if (permission.status !== 'granted') return;
+      if (permission.status !== 'granted') {
+        console.warn('Recording permission not granted');
+        return;
+      }
 
       await audioAdapter.setAudioModeAsync({
         allowsRecordingIOS: true,
@@ -21,6 +24,11 @@ export const VoiceRecorder = ({ onFinished }: { onFinished?: (uri: string) => vo
       });
 
       const recording = audioAdapter.createRecording();
+      if (!recording) {
+        console.warn('Could not create recording instance');
+        return;
+      }
+      
       const preset = audioAdapter?.Audio?.RECORDING_OPTIONS_PRESET_HIGH_QUALITY || (audioAdapter?.Audio?.RECORDING_OPTIONS_PRESET_LOW_QUALITY || {});
       await recording.prepareToRecordAsync(preset);
       await recording.startAsync();
@@ -36,20 +44,26 @@ export const VoiceRecorder = ({ onFinished }: { onFinished?: (uri: string) => vo
       animRef.current.start();
     } catch (err) {
       console.error('Failed to start recording', err);
+      setIsRecording(false);
     }
   }
 
   async function stopRecording() {
     try {
+      if (!recording) return;
       await recording?.stopAndUnloadAsync();
       const uri = recording?.getURI();
       setIsRecording(false);
       animRef.current?.stop();
       animRef.current = null;
       setRecording(null);
-      onFinished && uri && onFinished(uri);
+      if (onFinished && uri) {
+        onFinished(uri);
+      }
     } catch (err) {
       console.error('Failed to stop recording', err);
+      setIsRecording(false);
+      setRecording(null);
     }
   }
 
@@ -58,18 +72,27 @@ export const VoiceRecorder = ({ onFinished }: { onFinished?: (uri: string) => vo
       activeOpacity={0.8}
       onPressIn={startRecording}
       onPressOut={stopRecording}
-      style={styles.container}
+      style={styles.iconBtn}
     >
-      <Animated.View style={[styles.button, { transform: [{ scale: scaleAnim }] }]}>
-        <MaterialIcons name={isRecording ? 'mic' : 'keyboard-voice'} size={20} color="#fff" />
+      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+        <MaterialIcons 
+          name={isRecording ? 'mic' : 'mic-none'} 
+          size={24} 
+          color={isRecording ? colors.error : colors.textLight} 
+        />
       </Animated.View>
-      <Text style={styles.label}>{isRecording ? 'تسجيل...' : 'اضغط للتحدث'}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  iconBtn: {
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center'
   },

@@ -688,34 +688,40 @@ VOICE_CALLING_GUIDE.md     - Voice implementation
 
 ### For Current Project
 
-**Short Term:**
-1. **Continue with Expo** for rapid feature development
-2. **Improve Flutter** documentation to match Expo
-3. **Add missing screens** to Flutter version (Home, Services)
-4. **Add testing** to Expo version
+**Short Term (1-3 months):**
+1. **Continue with Expo** for rapid feature development - Priority: HIGH
+2. **Improve Flutter** documentation to match Expo - Priority: MEDIUM
+3. **Add missing screens** to Flutter version (Home, Services) - Priority: LOW
+4. **Add testing** to Expo version - Priority: HIGH
 
-**Long Term:**
+**Medium Term (3-6 months):**
+1. **Evaluate platform performance** with real users
+2. **Gather team feedback** on development experience
+3. **Assess maintenance costs** for both platforms
+4. **Consider feature requirements** for next phase
+
+**Long Term (6-12 months):**
 1. **Choose one platform** based on team expertise and requirements
-2. If choosing Flutter: Invest in documentation and missing features
-3. If choosing Expo: Optimize performance and add testing
+2. If choosing Flutter: Invest in documentation and missing features (3-4 months)
+3. If choosing Expo: Optimize performance and add testing (2-3 months)
 4. Consider maintaining both if targeting different user segments
 
 ### Feature Parity Checklist
 
-#### Flutter needs:
-- [ ] Home Screen with service cards
-- [ ] Services Screen with search
-- [ ] Guest Help Screen
-- [ ] Elder Mode Screen
-- [ ] Comprehensive documentation
-- [ ] More UI polish on splash/onboarding
+#### Flutter needs (Estimated: 4-6 weeks):
+- [ ] **Priority HIGH** - Comprehensive documentation (1 week)
+- [ ] **Priority HIGH** - Home Screen with service cards (1 week)
+- [ ] **Priority MEDIUM** - Services Screen with search (1 week)
+- [ ] **Priority MEDIUM** - More UI polish on splash/onboarding (3-5 days)
+- [ ] **Priority LOW** - Guest Help Screen (3-5 days)
+- [ ] **Priority LOW** - Elder Mode Screen (3-5 days)
 
-#### Expo needs:
-- [ ] Test suite (Jest + Testing Library)
-- [ ] Performance optimization
-- [ ] TypeScript stricter mode
-- [ ] Error boundary implementation
-- [ ] Analytics integration
+#### Expo needs (Estimated: 3-4 weeks):
+- [ ] **Priority HIGH** - Test suite (Jest + Testing Library) (1 week)
+- [ ] **Priority HIGH** - Error boundary implementation (2-3 days)
+- [ ] **Priority MEDIUM** - Performance optimization (1 week)
+- [ ] **Priority MEDIUM** - TypeScript stricter mode (3-5 days)
+- [ ] **Priority LOW** - Analytics integration (2-3 days)
 
 ---
 

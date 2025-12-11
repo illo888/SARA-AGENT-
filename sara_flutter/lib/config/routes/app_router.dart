@@ -9,6 +9,8 @@ import '../../features/services/services_screen.dart';
 import '../../features/safe_gate/safe_gate_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/voice_call/voice_call_screen.dart';
+import '../../features/guest_help/guest_help_screen.dart';
+import '../../features/elder_mode/elder_mode_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -68,6 +70,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/voice-call',
         builder: (context, state) => const VoiceCallScreen(),
+      ),
+      GoRoute(
+        path: '/guest-help',
+        builder: (context, state) => const GuestHelpScreen(),
+      ),
+      GoRoute(
+        path: '/elder-mode',
+        builder: (context, state) => const ElderModeScreen(),
       ),
     ],
   );

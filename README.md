@@ -1,6 +1,6 @@
 <div align="center">
 
-#  SARA  
+#  SAR
 ## المساعد الذكي الموحّد للخدمات الحكومية  
 ### Smart Absher Response Assistant
 
